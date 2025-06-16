@@ -3095,3 +3095,17 @@ define Device/zyxel_wsm20
   KERNEL_INITRAMFS := kernel-bin | lzma | fit lzma $$(KDIR)/image-$$(firstword $$(DEVICE_DTS)).dtb | znet-header V1.00(ABZF.0)C0
 endef
 TARGET_DEVICES += zyxel_wsm20
+
+define Device/cw-ap717-v2
+  $(Device/dsa-migration)
+  IMAGE_SIZE := 15808k
+  DEVICE_VENDOR := Combway
+  DEVICE_MODEL := AP717 V2
+  DEVICE_VARIANT := 16M
+  DEVICE_PACKAGES := kmod-mt7603 kmod-mt7615e \
+    kmod-mt7663-firmware-ap \
+    -uboot-envtools
+  SUPPORTED_DEVICES += combway,cw-ap717-v2
+endef
+TARGET_DEVICES += cw-ap717-v2
+

@@ -261,6 +261,11 @@ z-router,zr-2660)
 zyxel,lte3301-plus)
 	ucidef_set_led_netdev "internet" "internet" "white:internet" "wwan0"
 	;;
+combway,cw-ap717-v2)
+    ucidef_set_led_default "system" "system led" "system" "1" 
+    ucidef_set_led_default "power" "power led" "power" "1" 
+    ucidef_set_led_wlan "wlan" "WiFi 2.4GHz" "wlan" "phy0tpt"
+	;;
 esac
 
 board_config_flush
