@@ -35,6 +35,13 @@ elecom,wrc-1167fs)
 	ucidef_set_led_switch "lan" "lan" "green:lan" "switch0" "0x8"
 	ucidef_set_led_switch "internet" "internet" "green:internet" "switch0" "0x10"
 	;;
+combway,cw-wkr1200)
+	ucidef_set_led_default "system" "SYSTEM" "system" "1"
+	ucidef_set_led_default "pwr" "PWR" "power" "1"
+	ucidef_set_led_default "red" "red-PWR" "red" "0"
+	ucidef_set_led_default "mesh" "MeshLED" "mesh" "0"
+	ucidef_set_led_wlan "wlan2g" "wlan2g" "wlan" "phy0tpt"
+	;;
 glinet,gl-mt300n-v2)
 	ucidef_set_led_netdev "wifi_led" "wifi" "red:wlan" "wlan0"
 	ucidef_set_led_switch "wan" "wan" "green:wan" "switch0" "0x1"

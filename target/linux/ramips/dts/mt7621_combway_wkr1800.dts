@@ -1,0 +1,196 @@
+#include "mt7621.dtsi"
+
+#include <dt-bindings/gpio/gpio.h>
+#include <dt-bindings/input/input.h>
+
+/ {
+	compatible = "combway,wkr1800", "mediatek,mt7621-soc";
+	model = "COMBWAY WKR1800";
+
+	aliases {
+		led-boot = &led_sys;
+		led-failsafe = &led_sys;
+		led-running = &led_sys;
+		led-upgrade = &led_sys;
+	};
+
+	chosen {
+		bootargs = "console=ttyS0,115200";
+	};
+
+	leds {
+		compatible = "gpio-leds";
+
+		//
+		power {
+			label = "power";
+			gpios = <&gpio 15 GPIO_ACTIVE_LOW>;
+			default-state = "on";
+		};
+
+		//
+		wlan2g {
+			label = "wlan2g";
+			gpios = <&gpio 7 GPIO_ACTIVE_LOW>;
+			default-state = "off";
+		};
+
+		mesh {
+			label = "mesh";
+			gpios = <&gpio 3 GPIO_ACTIVE_LOW>;
+			default-state = "off";
+		};
+
+		// 
+		led_sys:red {
+			label = "red";
+			gpios = <&gpio 4 GPIO_ACTIVE_LOW>;
+			default-state = "off";
+		};
+
+		system {
+			label = "system";
+			gpios = <&gpio 6 GPIO_ACTIVE_LOW>;
+			default-state = "off";
+		};
+	};
+
+	keys {
+		compatible = "gpio-keys";
+		reset {
+			label = "reset";
+			gpios = <&gpio 16 GPIO_ACTIVE_LOW>;
+			linux,code = <KEY_RESTART>;
+		};
+
+		BTN_0 {
+			label = "BTN_0";
+			gpios = <&gpio 18 GPIO_ACTIVE_LOW>;
+			linux,code = <BTN_0>;
+		};
+	};
+
+};
+
+&nand {
+	status = "okay";
+
+	mediatek,nmbm;
+	mediatek,bmt-max-ratio = <1>;
+	mediatek,bmt-max-reserved-blocks = <64>;
+	
+	partitions {
+		compatible = "fixed-partitions";
+		#address-cells = <1>;
+		#size-cells = <1>;
+
+		partition@0 {
+			label = "uboot";
+			reg = <0x00000 0x80000>; /* 64 KB */
+		};
+
+		partition@80000 {
+			label = "uboot_env";
+			reg = <0x80000 0x40000>; /* 32 KB */
+		};
+
+		partition@c0000 {
+			label = "wlanmac";
+			reg = <0xc0000 0x40000>; /* 32 KB */
+		};
+
+		factory:partition@100000 {
+			label = "factory";
+			reg = <0x100000 0x80000>;
+
+			nvmem-layout {
+				compatible = "fixed-layout";
+				#address-cells = <1>;
+				#size-cells = <1>;
+				eeprom_factory_0: eeprom@0 {
+					reg = <0x0 0xe00>;
+				};
+			
+				macaddr_factory_0004: macaddr@0004 {
+					reg = <0x0004 0x6>;
+				};
+			};
+		};
+
+		partition@180000 {
+			label = "firmware";
+			reg = <0x180000 0x7680000>;
+
+			compatible = "fixed-partitions";
+			#address-cells = <1>;
+			#size-cells = <1>;
+
+			partition@0 {
+				label = "kernel";
+				reg = <0x0 0x400000>;
+			};
+
+			partition@400000 {
+				label = "ubi";
+				reg = <0x400000 0x7280000>;
+			};
+			/* last 128KiB *32 is reserved for bad blocks management */
+		};
+	};
+};
+
+&switch0 {
+	ports {
+		port@1 {
+			status = "okay";
+			label = "eth0";
+			nvmem-cells = <&macaddr_factory_0004 1>;
+			nvmem-cell-names = "mac-address";
+			mac-address-increment = <1>;
+		};
+
+		port@2 {
+			status = "okay";
+			label = "eth1";
+		};
+
+		port@3 {
+			status = "okay";
+			label = "eth2";
+		};
+
+		port@4 {
+			status = "okay";
+			label = "eth3";
+		};
+
+	};
+};
+
+&pcie {
+	status = "okay";
+};
+
+&pcie1 {
+	wifi@0,0 {
+		compatible = "mediatek,mt76";
+		reg = <0x0000 0 0 0 0>;
+
+		nvmem-cells = <&eeprom_factory_0>, <&macaddr_factory_0004 0>;
+        nvmem-cell-names = "eeprom", "mac-address";
+        mediatek,disable-radar-background;
+	};
+};
+
+&gmac0 {
+	nvmem-cells = <&macaddr_factory_0004 0>;
+	nvmem-cell-names = "mac-address";
+	label = "dsa";
+};
+
+&state_default {
+	gpio {
+		groups = "i2c", "uart2", "uart3", "wdt", "jtag";
+		function = "gpio";
+	};
+};

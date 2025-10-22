@@ -207,6 +207,15 @@ define Device/elecom_wrc-1167fs
 endef
 TARGET_DEVICES += elecom_wrc-1167fs
 
+define Device/cw-wkr1200
+  IMAGE_SIZE := 16064k
+  DEVICE_VENDOR := COMBWAY
+  DEVICE_MODEL := CW-WKR1200
+  DEVICE_PACKAGES := kmod-mt7615e kmod-mt7663-firmware-ap
+  SUPPORTED_DEVICES += combway,cw-wkr1200
+endef
+TARGET_DEVICES += cw-wkr1200
+
 define Device/glinet_gl-mt300n-v2
   IMAGE_SIZE := 16064k
   DEVICE_VENDOR := GL.iNet

@@ -35,6 +35,13 @@ yuncore,g720)
 	ucidef_set_led_wlan "wlan2g" "WiFi 2.4GHz" "mt76-phy0" "phy0tpt"
 	ucidef_set_led_wlan "wlan5g" "WiFi 5GHz" "mt76-phy1" "phy1tpt"
 	;;
+combway,wkr1800)
+	ucidef_set_led_default "system" "SYSTEM" "system" "1"
+	ucidef_set_led_default "pwr" "PWR" "power" "1"
+	ucidef_set_led_default "red" "red-PWR" "red" "0"
+	ucidef_set_led_default "mesh" "MeshLED" "mesh" "0"
+	ucidef_set_led_wlan "wlan2g" "wlan2g" "wlan2g" "phy0tpt"
+	;;
 asus,rt-n56u-b1)
 	ucidef_set_led_netdev "lan" "LAN link" "blue:lan" "br-lan"
 	ucidef_set_led_netdev "wan" "WAN link" "blue:wan" "wan"

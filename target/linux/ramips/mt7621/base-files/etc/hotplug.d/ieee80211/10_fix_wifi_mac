@@ -192,6 +192,11 @@ case "$board" in
 		hw_mac_addr="$(mtd_get_mac_binary rom_file 0xf100)"
 		[ "$PHYNBR" = "1" ] &&  macaddr_add "$hw_mac_addr" 2 > "/sys${DEVPATH}/macaddress"
 		;;
+	combway,wkr1800)
+		addr=$(mtd_get_mac_binary factory 0x0004)
+		[ "$PHYNBR" = "0" ] && echo "$addr" > /sys${DEVPATH}/macaddress
+		[ "$PHYNBR" = "1" ] && macaddr_add "$addr" 1 > /sys${DEVPATH}/macaddress
+		;;
 	yuncore,ax820|\
 	yuncore,g720)
 		[ "$PHYNBR" = "1" ] && \
